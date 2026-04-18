@@ -1,574 +1,475 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bidut Karki</title>
-    <link rel="stylesheet" href="styles/styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bidut Karki — Data Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #fafaf8;
+    --white: #ffffff;
+    --ink: #1a1a1a;
+    --ink-secondary: #555550;
+    --ink-muted: #999990;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --accent-border: #bfdbfe;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --green-border: #bbf7d0;
+    --border: #e8e8e4;
+    --border-strong: #d0d0c8;
+    --surface: #f4f4f0;
+    --tag-bg: #f0f0ec;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Nunito Sans', system-ui, sans-serif;
+    --r: 8px;
+    --r-sm: 4px;
+    --max-w: 800px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,248,0.93);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: var(--max-w); margin: 0 auto; padding: 0 28px;
+    height: 54px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-size: 17px; font-weight: 700;
+    color: var(--ink); text-decoration: none; letter-spacing: -0.3px;
+  }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a {
+    color: var(--ink-muted); text-decoration: none;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero { padding: 72px 0 64px; border-bottom: 1px solid var(--border); }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--green); background: var(--green-light);
+    border: 1px solid var(--green-border);
+    padding: 5px 14px; border-radius: 100px; margin-bottom: 26px;
+  }
+  .badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green); animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.25; } }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(38px, 5.5vw, 58px);
+    font-weight: 700; line-height: 1.1; letter-spacing: -1.5px;
+    color: var(--ink); margin-bottom: 20px;
+  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+
+  .hero-bio {
+    font-size: 17px; line-height: 1.8; color: var(--ink-secondary);
+    max-width: 540px; margin-bottom: 32px; font-weight: 300;
+  }
+  .hero-bio strong { color: var(--ink); font-weight: 700; }
+
+  .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+  .meta-pill {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: var(--ink-muted);
+    background: var(--white); border: 1px solid var(--border);
+    padding: 5px 12px; border-radius: 100px;
+  }
+
+  .cta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-body); font-size: 13px; font-weight: 700;
+    padding: 10px 20px; border-radius: var(--r-sm);
+    text-decoration: none; transition: all 0.15s;
+    border: 1.5px solid transparent; cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .btn-primary:hover {
+    background: #1d4ed8; border-color: #1d4ed8;
+    transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+  }
+  .btn-ghost {
+    background: var(--white); color: var(--ink); border-color: var(--border-strong);
+  }
+  .btn-ghost:hover { border-color: var(--ink); transform: translateY(-1px); }
+
+  /* SECTIONS */
+  section {
+    padding: 60px 0; border-bottom: 1px solid var(--border);
+    opacity: 0; transform: translateY(18px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  section.visible { opacity: 1; transform: none; }
+
+  .sec-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-muted); margin-bottom: 6px;
+  }
+  h2 {
+    font-family: var(--font-display); font-size: 26px; font-weight: 700;
+    letter-spacing: -0.4px; color: var(--ink); margin-bottom: 28px; line-height: 1.2;
+  }
+
+  /* STACK */
+  .stack-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: var(--r); overflow: hidden;
+  }
+  .stack-cell {
+    background: var(--white); padding: 20px 22px; transition: background 0.15s;
+  }
+  .stack-cell:hover { background: var(--accent-light); }
+  .stack-cell-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    background: var(--tag-bg); color: var(--ink-secondary);
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 100px; border: 1px solid var(--border); white-space: nowrap;
+  }
+
+  /* EXPERIENCE */
+  .exp-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .exp-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 28px 30px;
+    position: relative; transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .exp-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); border-color: var(--border-strong); }
+  .exp-card.current { border-color: var(--accent-border); background: #fafcff; }
+
+  .current-badge {
+    position: absolute; top: 18px; right: 18px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-light);
+    border: 1px solid var(--accent-border); padding: 3px 10px; border-radius: 100px;
+  }
+
+  .exp-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 3px;
+  }
+  .exp-company {
+    font-family: var(--font-display); font-size: 19px; font-weight: 700;
+    letter-spacing: -0.3px; color: var(--ink);
+  }
+  .exp-period { font-size: 12px; font-weight: 600; color: var(--ink-muted); padding-right: 90px; }
+  .exp-role { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
+
+  .exp-points { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+  .exp-points li {
+    font-size: 14px; line-height: 1.65; color: var(--ink-secondary);
+    padding-left: 20px; position: relative;
+  }
+  .exp-points li::before {
+    content: '—'; position: absolute; left: 0;
+    color: var(--border-strong); font-size: 11px; top: 2px;
+  }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .project-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 24px 26px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
+  }
+  .project-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+    transform: translateY(-2px); border-color: var(--border-strong);
+  }
+  .project-icon { font-size: 24px; line-height: 1; }
+  .project-name {
+    font-family: var(--font-display); font-size: 16px; font-weight: 700;
+    letter-spacing: -0.2px; color: var(--ink); line-height: 1.25;
+  }
+  .project-desc { font-size: 13px; line-height: 1.7; color: var(--ink-secondary); flex: 1; }
+
+  /* ABOUT */
+  .drives-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .drive-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 22px 24px;
+  }
+  .drive-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .drive-desc { font-size: 13px; line-height: 1.65; color: var(--ink-secondary); font-weight: 300; }
+
+  /* FOOTER */
+  footer {
+    padding: 36px 0 44px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-name { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--ink); }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a {
+    font-size: 13px; font-weight: 600; color: var(--ink-muted);
+    text-decoration: none; transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-copy { width: 100%; font-size: 12px; color: var(--ink-muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 620px) {
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+    .projects-grid, .drives-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    h1 { font-size: 34px; }
+    .hero { padding: 48px 0 40px; }
+    .exp-period { padding-right: 0; }
+  }
+  @media (max-width: 420px) {
+    .stack-grid { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
+<body>
 
-<body class="main-content">
-    <header class="container header active" id="home">
-        <div class="header-content">
-            <div class="left-header">
-                <div class="h-shape"></div>
-                <div class="image">
-                    <img src="img/hero.jpg" alt="">
-                </div>
-            </div>
-            <div class="right-header">
-                <h1 class="name">
-                    Hi, I'm <span>Bidut Karki.</span>
-                    A Back-End Developer.
-                </h1>
-                <p>
-                    Hi there! I'm a seasoned backend developer with a passion for creating efficient and scalable systems. With several years of experience in developing robust and secure applications, I have honed my skills in various programming languages and technologies. My expertise in data architecture, API design, and cloud infrastructure allows me to deliver highly performant and reliable solutions.
-                </p>
-                <div class="btn-con">
-                    <a href="https://drive.google.com/file/d/1_n3kaJ6xMGyd_rC3LbAImoQDoBdKr-_1/view?usp=sharing"
-                        class="main-btn">
-                        <span class="btn-text">Download CV</span>
-                        <span class="btn-icon"><i class="fas fa-download"></i></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
-    <main>
-        <section class="container about" id="about">
-            <div class="main-title">
-                <h2>About <span>me</span><span class="bg-text">my stats</span></h2>
-            </div>
-            <div class="about-container">
-                <div class="left-about">
-                    <h4>Information About me</h4>
-                    <p>
-                        With an experience of over 2+ years I consider myself a backend heavy full stack developer. Over
-                        the years, I have worked on both front-end and back-end technologies. <br /> <br /> I had
-                        started my own organization in my university days and have worked in 2 technology companies, so
-                        far. I have professionally worked on Core PHP, Python, Laravel, Django, FastAPI, React and
-                        various RDBMS. Talking about the industries, I have worked with Educational, E-commerce,
-                        Healthcare and IT related sectors.
-                    </p>
-                    <div class="btn-con">
-                        <a href="https://drive.google.com/file/d/1_n3kaJ6xMGyd_rC3LbAImoQDoBdKr-_1/view?usp=sharing"
-                            class="main-btn">
-                            <span class="btn-text">Download CV</span>
-                            <span class="btn-icon"><i class="fas fa-download"></i></span>
-                        </a>
-                    </div>
-                </div>
-                <div class="right-about">
-                    <div class="about-item">
-                        <div class="abt-text">
-                            <p class="large-text">10+</p>
-                            <p class="small-text">Projects <br /> Completed</p>
-                        </div>
-                    </div>
-                    <div class="about-item">
-                        <div class="abt-text">
-                            <p class="large-text">2+</p>
-                            <p class="small-text">Years of <br /> experience</p>
-                        </div>
-                    </div>
-                    <div class="about-item">
-                        <div class="abt-text">
-                            <p class="large-text">10+</p>
-                            <p class="small-text">Happy <br /> Clients</p>
-                        </div>
-                    </div>
-                    <div class="about-item">
-                        <div class="abt-text">
-                            <p class="large-text">10+</p>
-                            <p class="small-text">Customer <br /> reviews</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="about-stats">
-                <h4 class="stat-title">My Skills</h4>
-                <div class="progress-bars">
-                    <div class="progress-bar">
-                        <p class="prog-title">html</p>
-                        <div class="progress-con">
-                            <p class="prog-text">90%</p>
-                            <div class="progress">
-                                <span class="html"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <p class="prog-title">css</p>
-                        <div class="progress-con">
-                            <p class="prog-text">75%</p>
-                            <div class="progress">
-                                <span class="css"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <p class="prog-title">javascript</p>
-                        <div class="progress-con">
-                            <p class="prog-text">85%</p>
-                            <div class="progress">
-                                <span class="js"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <p class="prog-title">ReactJS</p>
-                        <div class="progress-con">
-                            <p class="prog-text">75%</p>
-                            <div class="progress">
-                                <span class="react"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <p class="prog-title">PHP</p>
-                        <div class="progress-con">
-                            <p class="prog-text">95%</p>
-                            <div class="progress">
-                                <span class="node"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <p class="prog-title">Python</p>
-                        <div class="progress-con">
-                            <p class="prog-text">95%</p>
-                            <div class="progress">
-                                <span class="python"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h4 class="stat-title">My Timeline</h4>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="tl-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="tl-duration">Aug, 2022 - present</p>
-                    <h5>Programmer Analyst<span> - TechVariable Pvt. Ltd.</span></h5>
-                    <p>
-                        Here I have been working on python and web frameworks like Django and FastAPI. I am responsible
-                        to manage, build, test and deploy a project on my own if it a small scale project. I also
-                        responsible to guide interns on regular basis.
-                    </p>
-                </div>
-                <div class="timeline-item">
-                    <div class="tl-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="tl-duration">July, 2018 - July, 2022</p>
-                    <h5>Computer Science and Engineering<span> - Lovely Professional University, Phagwara.</span></h5>
-                    <p>
-                        I did my bachelors from this university. This phase of my life taught me a lot. Be it hard skils like problem solving, Web technologies, AI/ML and databases or be it soft skills like time management and effective communication. I did specialized in Data Science and Android Development.
-                    </p>
-                </div>
-                <div class="timeline-item">
-                    <div class="tl-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="tl-duration">Aug, 2021 - Aug, 2022</p>
-                    <h5>Software Engineer<span> - Oriental Outsourcing Consultants Pvt. Ltd.</span></h5>
-                    <p>
-                        Here I worked as a full stack PHP developer and working on core PHP and frameworks like Laravel.
-                        I was responsible to give ETAs for various projects and handled multiple projects. I had a team
-                        of 2-3 people who were relatively new to the organization.
-                    </p>
-                </div>
-                <div class="timeline-item">
-                    <div class="tl-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="tl-duration">2016 - 2018</p>
-                    <h5>Science Stream<span> - Army Public School, Tezpur</span></h5>
-                    <p>
-                        I did my +2 level of education from this school where I learnt Java, MySQL and worked on framework like Netbeans.
-                    </p>
-                </div>
-                <div class="timeline-item">
-                    <div class="tl-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="tl-duration">Feb, 2020 - Jun, 2021</p>
-                    <h5>Founder & Advisor<span> - Eminent Organization</span></h5>
-                    <p>
-                        With the help of my co-founder, we build this event management company in 2020 and we were organizing event. Here I had developed our organization website and attendance system for memeber's meeting.
-                    </p>
-                </div>
-                <div class="timeline-item">
-                    <div class="tl-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="tl-duration">2015 - 2016</p>
-                    <h5>Matriculation<span> - Army Public School, Missamari</span></h5>
-                    <p>
-                        Here I did my schooling and 10th grade where I learnt basic knowledge of website, HTML, CSS and other technologies. This was the school where I started to be eager about and explore more about technologies.
-                    </p>
-                </div>
-            </div>
-        </section>
-        <!-- <section class="container" id="portfolio">
-            <div class="main-title">
-                <h2>My <span>Portfolio</span><span class="bg-text">My Work</span></h2>
-            </div>
-            <p class="port-text">
-                Here is some of my work that I've done in various programming languages.
-            </p>
-            <div class="portfolios">
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="https://drive.google.com/file/d/15bscp_0ibQDmo2pTE5fjmPgSJVzsIu4b/view?usp=share_link" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="img/port2.jpg" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="img/port3.jpg" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="img/port4.jpg" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="img/port5.jpg" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="img/port2.jpg" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="image">
-                        <img src="img/port7.jpg" alt="">
-                    </div>
-                    <div class="hover-items">
-                        <h3>Project Source</h3>
-                        <div class="icons">
-                            <a href="#" class="icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-behance"></i>
-                            </a>
-                            <a href="#" class="icon">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-        <section class="container" id="blogs">
-            <div class="blogs-content">
-                <div class="main-title">
-                    <h2>My <span>Blogs</span><span class="bg-text">My Blogs</span></h2>
-                </div>
-                <div class="blogs">
-                    <div class="blog">
-                        <img src="img/port6.jpg" alt="">
-                        <div class="blog-text">
-                            <h4>
-                                <a href="https://medium.com/@bidutjava3/how-to-use-celery-and-rabbitmq-and-flower-with-django-52e430d3c3b6">
-                                    Task Queue with celery
-                                </a>
-                            </h4>
-                            <p>
-                                I have prepared a step by step guid to work with Celery, RabbitMQ and Flower with Django. 
-                            </p>
-                        </div>
-                    </div>
-                    <div class="blog">
-                        <img src="img/blog1.jpg" alt="">
-                        <div class="blog-text">
-                            <h4>
-                                <a href="https://medium.com/@bidutjava3/caching-in-django-387344ccb353">
-                                    Caching in Django
-                                </a>
-                            </h4>
-                            <p>
-                                Wrote a small article about the scope and types of caching in django.
-                            </p>
-                        </div>
-                    </div>
-                    <!-- <div class="blog">
-                        <img src="img/blog2.jpg" alt="">
-                        <div class="blog-text">
-                            <h4>
-                                Become a Web Designer in 10 Days
-                            </h4>
-                            <p>
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                Doloribus natus voluptas, eos obcaecati recusandae amet?
-                            </p>
-                        </div>
-                    </div>
-                    <div class="blog">
-                        <img src="img/blog3.jpg" alt="">
-                        <div class="blog-text">
-                            <h4>
-                                Debbuging made easy with Web Inspector
-                            </h4>
-                            <p>
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                Doloribus natus voluptas, eos obcaecati recusandae amet?
-                            </p>
-                        </div>
-                    </div>
-                    <div class="blog">
-                        <img src="img/port1.jpg" alt="">
-                        <div class="blog-text">
-                            <h4>
-                                Get started with Web Design and UI Design
-                            </h4>
-                            <p>
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                Doloribus natus voluptas, eos obcaecati recusandae amet?
-                            </p>
-                        </div>
-                    </div>
-                    <div class="blog">
-                        <img src="img/port3.jpg" alt="">
-                        <div class="blog-text">
-                            <h4>
-                                This is what you need to know about Web Design
-                            </h4>
-                            <p>
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                Doloribus natus voluptas, eos obcaecati recusandae amet?
-                            </p>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
-        </section>
-        <section class="container contact" id="contact">
-            <div class="contact-container">
-                <div class="main-title">
-                    <h2>Contact <span>Me</span><span class="bg-text">Contact</span></h2>
-                </div>
-                <div class="contact-content-con">
-                    <div class="left-contact">
-                        <h4>Contact me here</h4>
-                        <p>
-                            
-                        </p>
-                        <div class="contact-info">
-                            <div class="contact-item">
-                                <div class="icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Location</span>
-                                </div>
-                                <p>
-                                    : Guwahati, Assam, India
-                                </p>
-                            </div>
-                            <div class="contact-item">
-                                <div class="icon">
-                                    <i class="fas fa-envelope"></i>
-                                    <span>Email</span>
-                                </div>
-                                <p>
-                                    <span>: bidutjava3@gmail.com</span>
-                                </p>
-                            </div>
-                            <div class="contact-item">
-                                <div class="icon">
-                                    <i class="fas fa-user-graduate"></i>
-                                    <span>Education</span>
-                                </div>
-                                <p>
-                                    <span>: Lovely Professional University, Phagwara</span>
-                                </p>
-                            </div>
-                            <div class="contact-item">
-                                <div class="icon">
-                                    <i class="fas fa-user-graduate"></i>
-                                    <span>Mobile Number</span>
-                                </div>
-                                <p>
-                                    <span>: +91-8011575324</span>
-                                </p>
-                            </div>
-                            <div class="contact-item">
-                                <div class="icon">
-                                    <i class="fas fa-globe-africa"></i>
-                                    <span>Languages</span>
-                                </div>
-                                <p>
-                                    <span>: English, Hindi, Nepali, Assamesse</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="contact-icons">
-                            <div class="contact-icon">
-                                <!-- <a href="www.facebook.com" target="_blank">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" target="_blank">
-                                    <i class="fab fa-twitter"></i>
-                                </a> -->
-                                <a href="https://github.com/karki-03/" target="_blank">
-                                    <i class="fab fa-github"></i>
-                                </a>
-                                <a href="https://www.linkedin.com/in/bidutkarki/" target="_blank">
-                                    <i class="fab fa-linkedin-in"></i>
-                                    <!-- <i class="fab fa-youtube"></i> -->
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="right-contact">
-                        <form action="" class="contact-form">
-                            <div class="input-control i-c-2">
-                                <input type="text" required placeholder="YOUR NAME">
-                                <input type="email" required placeholder="YOUR EMAIL">
-                            </div>
-                            <div class="input-control">
-                                <input type="text" required placeholder="ENTER SUBJECT">
-                            </div>
-                            <div class="input-control">
-                                <textarea name="" id="" cols="15" rows="8" placeholder="Message Here..."></textarea>
-                            </div>
-                            <div class="submit-btn">
-                                <a href="https://drive.google.com/file/d/1_n3kaJ6xMGyd_rC3LbAImoQDoBdKr-_1/view?usp=sharing" class="main-btn">
-                                    <span class="btn-text">Download CV</span>
-                                    <span class="btn-icon"><i class="fas fa-download"></i></span>
-                                </a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">Bidut Karki</a>
+    <ul class="nav-links">
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </div>
+</nav>
 
-    <div class="controls">
-        <div class="control active-btn" data-id="home">
-            <i class="fas fa-home"></i>
-        </div>
-        <div class="control" data-id="about">
-            <i class="fas fa-user"></i>
-        </div>
-        <!-- <div class="control" data-id="portfolio">
-            <i class="fas fa-briefcase"></i>
-        </div> -->
-        <div class="control" data-id="blogs">
-            <i class="far fa-newspaper"></i>
-        </div>
-        <div class="control" data-id="contact">
-            <i class="fas fa-envelope-open"></i>
-        </div>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">Currently at DocNexus · Seattle, WA</div>
+    <h1>Data Engineer<br/><em>in healthcare.</em></h1>
+    <p class="hero-bio">
+      5+ years building <strong>data infrastructure</strong> across US healthcare and finance.
+      I work at the intersection of clinical intelligence, pharma, and engineering —
+      making sense of messy, high-stakes data.
+    </p>
+    <div class="hero-meta">
+      <div class="meta-pill">📍 Seattle, WA</div>
+      <div class="meta-pill">⏱ 5+ years</div>
+      <div class="meta-pill">🔬 BigQuery · FastAPI · AWS</div>
     </div>
-    <div class="theme-btn">
-        <i class="fas fa-adjust"></i>
+    <div class="cta">
+      <a href="https://linkedin.com/in/bidutkarki" target="_blank" class="btn btn-primary">LinkedIn →</a>
+      <a href="https://github.com/bidutkarki" target="_blank" class="btn btn-ghost">GitHub</a>
+      <a href="mailto:hello@bidutkarki.com" class="btn btn-ghost">Email</a>
     </div>
-    <script src="app.js"></script>
+  </div>
+
+  <!-- STACK -->
+  <section id="stack">
+    <div class="sec-label">Skills</div>
+    <h2>Tech Stack</h2>
+    <div class="stack-grid">
+      <div class="stack-cell">
+        <div class="stack-cell-label">Data Warehousing</div>
+        <div class="tags">
+          <span class="tag">BigQuery</span><span class="tag">ClickHouse</span>
+          <span class="tag">CloudSQL</span><span class="tag">Redshift</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Backend & APIs</div>
+        <div class="tags">
+          <span class="tag">FastAPI</span><span class="tag">Python</span>
+          <span class="tag">REST</span><span class="tag">SQLAlchemy</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Cloud & Infra</div>
+        <div class="tags">
+          <span class="tag">AWS EC2</span><span class="tag">S3</span>
+          <span class="tag">GCP</span><span class="tag">Docker</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Pipelines</div>
+        <div class="tags">
+          <span class="tag">Airflow</span><span class="tag">dbt</span><span class="tag">Batch Python</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Governance</div>
+        <div class="tags">
+          <span class="tag">OpenMetadata</span><span class="tag">Neo4j</span>
+          <span class="tag">HIPAA</span><span class="tag">GDPR</span>
+        </div>
+      </div>
+      <div class="stack-cell">
+        <div class="stack-cell-label">Healthcare Data</div>
+        <div class="tags">
+          <span class="tag">NPI Registry</span><span class="tag">ClinicalTrials.gov</span>
+          <span class="tag">PubMed</span><span class="tag">ORCID</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="sec-label">Work History</div>
+    <h2>Experience</h2>
+    <div class="exp-list">
+
+      <div class="exp-card current">
+        <div class="current-badge">Current</div>
+        <div class="exp-row">
+          <div class="exp-company">DocNexus</div>
+          <div class="exp-period">Mar 2025 → Present</div>
+        </div>
+        <div class="exp-role">Data Engineer · Healthcare Commercial Intelligence · Seattle, WA</div>
+        <ul class="exp-points">
+          <li>Built a multi-tier HCP-to-trial matching engine on BigQuery — scoring across NPI, institution, location, and ML embedding similarity against ClinicalTrials.gov.</li>
+          <li>Designed a tiered ClinicalTrials.gov v2 API integration replacing imprecise keyword search, dramatically improving trial coverage across physician cohorts.</li>
+          <li>Architected HCP publication matching pipeline with multi-dimensional scoring (affiliation, MeSH, co-author overlap, journal affinity) across PubMed datasets.</li>
+          <li>Built FastAPI services for real-time clinical data lookup; managing EC2 batch pipelines for ophthalmology and oncology HCP datasets.</li>
+          <li>Delivering data products for pharma accounts including GSK/ViiV, Novartis, Takeda, and Chugai.</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">BigQuery</span><span class="tag">ClickHouse</span><span class="tag">FastAPI</span>
+          <span class="tag">AWS EC2</span><span class="tag">ClinicalTrials v2 API</span><span class="tag">PubMed</span><span class="tag">NPI</span>
+        </div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-row">
+          <div class="exp-company">Cogneo Technologies</div>
+          <div class="exp-period">2022 → 2025</div>
+        </div>
+        <div class="exp-role">Data Engineer · US Finance & Compliance · Remote</div>
+        <ul class="exp-points">
+          <li>Led data governance and quality frameworks for US financial domain clients — metadata catalog, lineage graph, and automated quality checks.</li>
+          <li>Built compliance-focused pipelines with GDPR/CCPA controls using Airflow and graph-based data lineage with Neo4j.</li>
+          <li>Designed and maintained data dictionaries and audit trails for regulatory reporting across critical financial datasets.</li>
+        </ul>
+        <div class="tags">
+          <span class="tag">OpenMetadata</span><span class="tag">Airflow</span><span class="tag">Neo4j</span>
+          <span class="tag">Data Governance</span><span class="tag">GDPR / CCPA</span><span class="tag">Python</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-label">Work Samples</div>
+    <h2>Selected Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-icon">🧬</div>
+        <div class="project-name">Clinical Trials Matching Engine</div>
+        <div class="project-desc">Multi-tier HCP-to-trial scoring on BigQuery. Matches physicians using name, institution, location, and ML.DISTANCE embedding similarity. Runs in batch on EC2 across NPI cohorts.</div>
+        <div class="tags"><span class="tag">BigQuery</span><span class="tag">ML.DISTANCE</span><span class="tag">EC2</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">📄</div>
+        <div class="project-name">HCP Publication Matching</div>
+        <div class="project-desc">Multi-region BigQuery scoring (max 110 pts) linking physicians to PubMed publications via affiliation, MeSH, ORCID mapping, and co-author graph.</div>
+        <div class="tags"><span class="tag">PubMed</span><span class="tag">BigQuery</span><span class="tag">ORCID API</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">⚡</div>
+        <div class="project-name">Clinical Data API Service</div>
+        <div class="project-desc">FastAPI service for real-time provider lookup and tiered trial search using Essie query syntax. Specialty-specific keyword mappings. Async BigQuery clients per GCP region.</div>
+        <div class="tags"><span class="tag">FastAPI</span><span class="tag">Async Python</span><span class="tag">BigQuery</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">🏛️</div>
+        <div class="project-name">Data Governance Platform</div>
+        <div class="project-desc">End-to-end governance stack for US financial clients — metadata catalog, lineage via Neo4j, automated quality checks, GDPR/CCPA compliance reporting.</div>
+        <div class="tags"><span class="tag">OpenMetadata</span><span class="tag">Neo4j</span><span class="tag">Airflow</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-label">Motivation</div>
+    <h2>What drives me</h2>
+    <div class="drives-grid">
+      <div class="drive-card">
+        <div class="drive-title">US Healthcare Complexity</div>
+        <div class="drive-desc">Fragmented systems, high stakes, real patient impact. Exactly the kind of problem worth dedicating years to.</div>
+      </div>
+      <div class="drive-card">
+        <div class="drive-title">Clinical Intelligence</div>
+        <div class="drive-desc">Connecting HCPs, trials, publications, and pharma signals into something actionable for the people who need it.</div>
+      </div>
+      <div class="drive-card">
+        <div class="drive-title">Infrastructure that lasts</div>
+        <div class="drive-desc">Fast, reliable, and maintainable. I care about the long-term health of systems, not just shipping.</div>
+      </div>
+      <div class="drive-card">
+        <div class="drive-title">Governance & Trust</div>
+        <div class="drive-desc">Data you can trace and defend — especially when the stakes are regulatory and quality matters.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Bidut Karki</div>
+    <div class="footer-links">
+      <a href="https://linkedin.com/in/bidutkarki" target="_blank">LinkedIn</a>
+      <a href="https://github.com/bidutkarki" target="_blank">GitHub</a>
+      <a href="mailto:hello@bidutkarki.com">Email</a>
+    </div>
+    <div class="footer-copy">© 2025 Bidut Karki · bidutkarki.com</div>
+  </footer>
+
+</div>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('section').forEach(s => obs.observe(s));
+</script>
 </body>
-
 </html>
